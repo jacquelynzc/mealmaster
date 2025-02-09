@@ -41,11 +41,12 @@ body {
 .tab {
     flex: 1;
     text-align: center;
-    padding: 10px;
+    padding: 12px;
     color: white;
     cursor: pointer;
     font-weight: bold;
     transition: 0.3s;
+    border-bottom: 3px solid transparent;
 }
 
 .tab:hover {
@@ -70,10 +71,53 @@ body {
     display: block;
 }
 
-/* Pantry & Recipes List */
-.list {
-    list-style: none;
+/* 3D Effect Button */
+.get-recipes-btn {
+    background: linear-gradient(to bottom, #0077b6, #005f7a);
+    color: white;
+    font-weight: bold;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0px 5px 0px #004a5f;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.get-recipes-btn:hover {
+    background: linear-gradient(to bottom, #0093c4, #0077b6);
+    box-shadow: 0px 3px 0px #004a5f;
+    transform: translateY(2px);
+}
+
+/* Pantry List - Grocery Style */
+.pantry-list {
+    list-style-type: none;
     padding: 0;
+    margin-top: 10px;
+}
+
+.pantry-list li {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.pantry-list li:hover {
+    transform: scale(1.02);
+}
+
+/* Pantry Item Bullet */
+.pantry-list li::before {
+    content: "🛒";
+    margin-right: 10px;
 }
 
 /* Recipe Styling */

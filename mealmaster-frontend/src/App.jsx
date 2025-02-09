@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import "./styles.css"; // Import CSS file
+import "./styles.css"; // Import updated styles
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -8,6 +8,11 @@ export default function App() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("pantry"); // Default to Pantry Tab
+
+  // Fetch pantry items on load
+  useEffect(() => {
+    fetchPantry();
+  }, []);
 
   // Handle file selection
   const handleFileChange = (event) => {
@@ -23,7 +28,7 @@ export default function App() {
     formData.append("file", file);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/scan_receipt", formData, {
+      await axios.post("http://127.0.0.1:8000/scan_receipt", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("Receipt processed successfully!");
@@ -84,15 +89,12 @@ export default function App() {
 
       {/* Pantry Tab Content */}
       <div className={`tab-content ${activeTab === "pantry" ? "active" : ""}`}>
-        <button onClick={fetchPantry}>Refresh Pantry</button>
-        <ul className="list">
+        <ul className="pantry-list">
           {pantry.length === 0 ? (
             <p>No items in pantry yet.</p>
           ) : (
             pantry.map((item, index) => (
-              <li key={index}>
-                {item.name} - ${item.price.toFixed(2)}
-              </li>
+              <li key={index}>{item.name}</li>
             ))
           )}
         </ul>
@@ -100,7 +102,7 @@ export default function App() {
 
       {/* Recipes Tab Content */}
       <div className={`tab-content ${activeTab === "recipes" ? "active" : ""}`}>
-        <button onClick={fetchRecipes}>Get Recipes</button>
+        <button className="get-recipes-btn" onClick={fetchRecipes}>Get Recipes</button>
         <ul className="recipes-list">
           {recipes.length === 0 ? (
             <p>No recipes found.</p>
