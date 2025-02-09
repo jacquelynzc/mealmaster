@@ -7,30 +7,22 @@ export default function App() {
   const [pantry, setPantry] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("pantry"); // Default to Pantry Tab
+  const [activeTab, setActiveTab] = useState("pantry");
 
-  // Fetch pantry items on load
   useEffect(() => {
     fetchPantry();
   }, []);
 
-  // Handle file selection
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
+  const handleFileChange = (event) => setFile(event.target.files[0]);
 
-  // Upload receipt for OCR
   const uploadReceipt = async () => {
     if (!file) return alert("Please select a receipt image.");
     setLoading(true);
-
     const formData = new FormData();
     formData.append("file", file);
 
     try {
-      await axios.post("http://127.0.0.1:8000/scan_receipt", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axios.post("http://127.0.0.1:8000/scan_receipt", formData);
       alert("Receipt processed successfully!");
       fetchPantry();
     } catch (error) {
@@ -40,7 +32,6 @@ export default function App() {
     setLoading(false);
   };
 
-  // Fetch pantry items
   const fetchPantry = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/pantry");
@@ -50,16 +41,10 @@ export default function App() {
     }
   };
 
-  // Fetch recipes
   const fetchRecipes = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/recipes");
-      if (Array.isArray(response.data)) {
-        setRecipes(response.data);
-      } else {
-        console.error("Unexpected recipe data format:", response.data);
-        setRecipes([]);
-      }
+      setRecipes(response.data);
     } catch (error) {
       console.error("Error fetching recipes:", error);
     }
@@ -69,15 +54,6 @@ export default function App() {
     <div className="container">
       <h1>MealMaster 🥘</h1>
 
-      {/* Upload Section */}
-      <div className="upload-section">
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={uploadReceipt} disabled={loading}>
-          {loading ? "Processing..." : "Upload Receipt"}
-        </button>
-      </div>
-
-      {/* Tab Navigation */}
       <div className="tabs">
         <div className={`tab ${activeTab === "pantry" ? "active" : ""}`} onClick={() => setActiveTab("pantry")}>
           🛒 Pantry
@@ -87,37 +63,19 @@ export default function App() {
         </div>
       </div>
 
-      {/* Pantry Tab Content */}
-      <div className={`tab-content ${activeTab === "pantry" ? "active" : ""}`}>
-        <ul className="pantry-list">
-          {pantry.length === 0 ? (
-            <p>No items in pantry yet.</p>
-          ) : (
-            pantry.map((item, index) => (
-              <li key={index}>{item.name}</li>
-            ))
-          )}
-        </ul>
-      </div>
-
-      {/* Recipes Tab Content */}
       <div className={`tab-content ${activeTab === "recipes" ? "active" : ""}`}>
-        <button className="get-recipes-btn" onClick={fetchRecipes}>Get Recipes</button>
+        <button className="get-recipes-btn" onClick={fetchRecipes}>Get New Recipes</button>
         <ul className="recipes-list">
-          {recipes.length === 0 ? (
-            <p>No recipes found.</p>
-          ) : (
-            recipes.map((recipe, index) => (
-              <li key={index} className="recipe-item">
-                <img src={recipe.image} alt={recipe.title} className="recipe-img" />
-                <div>
-                  <strong>{recipe.title}</strong>
-                  <br />
-                  <a href={recipe.sourceUrl} target="_blank" rel="noopener noreferrer">View Recipe</a>
-                </div>
-              </li>
-            ))
-          )}
+          {recipes.map((recipe, index) => (
+            <li key={index} className="recipe-item">
+              <img src={recipe.image} alt={recipe.title} className="recipe-img" />
+              <div>
+                <strong>{recipe.title}</strong>
+                <br />
+                <a href={recipe.sourceUrl} target="_blank" rel="noopener noreferrer">View Recipe</a>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

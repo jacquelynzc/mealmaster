@@ -23,7 +23,7 @@ SPOONACULAR_URL = "https://api.spoonacular.com/recipes/findByIngredients"
 # Initialize FastAPI app
 app = FastAPI()
 
-# Enable CORS to allow frontend communication
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -48,13 +48,12 @@ def init_db():
     conn.commit()
     conn.close()
 
-init_db()  # Initialize database
+init_db()
 
 def save_to_db(item_name):
     """Insert grocery items if they don't exist already."""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-
     cursor.execute("SELECT id FROM grocery_items WHERE name=?", (item_name,))
     existing_item = cursor.fetchone()
 
@@ -72,6 +71,14 @@ def get_pantry_items():
     items = [{"name": row[0]} for row in cursor.fetchall()]
     conn.close()
     return items
+
+def is_valid_url(url):
+    """Checks if the URL is valid by sending a HEAD request."""
+    try:
+        response = requests.head(url, timeout=5)
+        return response.status_code == 200
+    except requests.RequestException:
+        return False
 
 @app.get("/")
 def read_root():
@@ -106,7 +113,7 @@ def parse_receipt_text(ocr_text: str):
     for line in ocr_text.split("\n"):
         line = line.strip()
         if line:
-            items.append({"item": line})  # Store item names only
+            items.append({"item": line})  
 
     return items
 
@@ -124,7 +131,6 @@ def get_recipes():
     if not ingredients:
         return {"message": "No ingredients found in pantry"}
 
-    # Get basic recipe list from Spoonacular
     response = requests.get(SPOONACULAR_URL, params={
         "ingredients": ",".join(ingredients),
         "apiKey": SPOONACULAR_API_KEY,
@@ -132,23 +138,23 @@ def get_recipes():
     })
 
     recipe_data = response.json()
-
     structured_recipes = []
 
     for recipe in recipe_data:
         recipe_id = recipe.get("id")
         
-        # Fetch full recipe details
         recipe_details = requests.get(
             f"https://api.spoonacular.com/recipes/{recipe_id}/information",
             params={"apiKey": SPOONACULAR_API_KEY}
         ).json()
 
-        structured_recipes.append({
-            "title": recipe.get("title", "No Title"),
-            "image": recipe.get("image", ""),
-            "sourceUrl": recipe_details.get("sourceUrl", "https://google.com")  # Ensures valid link
-        })
+        source_url = recipe_details.get("sourceUrl", "")
+        if is_valid_url(source_url):
+            structured_recipes.append({
+                "title": recipe.get("title", "No Title"),
+                "image": recipe.get("image", ""),
+                "sourceUrl": source_url
+            })
 
     return structured_recipes
 
