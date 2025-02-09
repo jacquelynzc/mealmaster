@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./styles.css"; // Import updated styles
+import "./styles.css";
 
 export default function App() {
   const [file, setFile] = useState(null);
   const [pantry, setPantry] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [recipeLoading, setRecipeLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [activeTab, setActiveTab] = useState("pantry");
 
   useEffect(() => {
@@ -15,38 +17,70 @@ export default function App() {
 
   const handleFileChange = (event) => setFile(event.target.files[0]);
 
-  const uploadReceipt = async () => {
-    if (!file) return alert("Please select a receipt image.");
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("file", file);
+const uploadReceipt = async () => {
+  if (!file) {
+    alert("Please select a receipt image.");
+    return;
+  }
+  setLoading(true);
+  setErrorMessage("");
 
-    try {
-      await axios.post("http://127.0.0.1:8000/scan_receipt", formData);
-      alert("Receipt processed successfully!");
-      fetchPantry();
-    } catch (error) {
-      console.error("Error uploading receipt:", error);
-      alert("Failed to process receipt.");
-    }
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await axios.post("http://127.0.0.1:8000/scan_receipt", formData);
+    alert("Receipt processed successfully!");
+    fetchPantry(); // ✅ Now it refreshes the pantry immediately
+  } catch (error) {
+    console.error("Error uploading receipt:", error);
+    setErrorMessage("Failed to process receipt. Please try again.");
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
-  const fetchPantry = async () => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/pantry");
-      setPantry(response.data.pantry);
-    } catch (error) {
-      console.error("Error fetching pantry:", error);
+const fetchPantry = async () => {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/pantry");
+    if (response.data.pantry && Array.isArray(response.data.pantry)) {
+      setPantry(response.data.pantry.map(item => item.name)); // ✅ Extracts names properly
     }
-  };
+  } catch (error) {
+    console.error("Error fetching pantry:", error);
+  }
+};
 
-  const fetchRecipes = async () => {
+const fetchRecipes = async () => {
+    setRecipeLoading(true);
+    setRecipes([]);
+
     try {
-      const response = await axios.get("http://127.0.0.1:8000/recipes");
-      setRecipes(response.data);
+        const response = await axios.get("http://127.0.0.1:8000/recipes");
+
+        if (response.data.message) {
+            alert(response.data.message);
+        } else if (!Array.isArray(response.data)) {
+            alert("Unexpected response format from server.");
+        } else {
+            setRecipes(response.data);
+        }
     } catch (error) {
-      console.error("Error fetching recipes:", error);
+        console.error("Error fetching recipes:", error);
+        alert("Failed to fetch recipes. Please check the backend and try again.");
+    } finally {
+        setRecipeLoading(false);
+    }
+};
+
+
+  const clearPantry = async () => {
+    try {
+      await axios.post("http://127.0.0.1:8000/clear_pantry");
+      alert("Pantry cleared!");
+      setPantry([]);
+    } catch (error) {
+      console.error("Error clearing pantry:", error);
     }
   };
 
@@ -54,6 +88,16 @@ export default function App() {
     <div className="container">
       <h1>MealMaster 🥘</h1>
 
+      {/* Upload Form */}
+      <div className="upload-section">
+        <input type="file" onChange={handleFileChange} />
+        <button className="upload-btn" onClick={uploadReceipt} disabled={loading}>
+          {loading ? "Processing..." : "Upload Receipt"}
+        </button>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+      </div>
+
+      {/* Tabs */}
       <div className="tabs">
         <div className={`tab ${activeTab === "pantry" ? "active" : ""}`} onClick={() => setActiveTab("pantry")}>
           🛒 Pantry
@@ -63,21 +107,46 @@ export default function App() {
         </div>
       </div>
 
-      <div className={`tab-content ${activeTab === "recipes" ? "active" : ""}`}>
-        <button className="get-recipes-btn" onClick={fetchRecipes}>Get New Recipes</button>
-        <ul className="recipes-list">
-          {recipes.map((recipe, index) => (
-            <li key={index} className="recipe-item">
-              <img src={recipe.image} alt={recipe.title} className="recipe-img" />
-              <div>
-                <strong>{recipe.title}</strong>
-                <br />
-                <a href={recipe.sourceUrl} target="_blank" rel="noopener noreferrer">View Recipe</a>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Pantry Tab */}
+      {activeTab === "pantry" && (
+        <div className="tab-content active">
+          <ul className="pantry-list">
+            {pantry.length === 0 ? (
+              <p>No items in pantry yet.</p>
+            ) : (
+              pantry.map((item, index) => <li key={index} className="pantry-item">{item}</li>)
+            )}
+          </ul>
+          <button className="clear-btn" onClick={clearPantry}>Clear Pantry</button>
+        </div>
+      )}
+
+      {/* Recipes Tab */}
+      {activeTab === "recipes" && (
+        <div className="tab-content active">
+          <button className="get-recipes-btn" onClick={fetchRecipes} disabled={recipeLoading}>
+            {recipeLoading ? "Fetching..." : "Get New Recipes"}
+          </button>
+          <ul className="recipes-list">
+            {recipes.length === 0 ? (
+              <p>No recipes found.</p>
+            ) : (
+              recipes.map((recipe, index) => (
+                <li key={index} className="recipe-item">
+                  <img src={recipe.image} alt={recipe.title} className="recipe-img" />
+                  <div>
+                    <strong>{recipe.title}</strong>
+                    <br />
+                    <a href={recipe.sourceUrl} target="_blank" rel="noopener noreferrer">
+                      View Recipe
+                    </a>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
