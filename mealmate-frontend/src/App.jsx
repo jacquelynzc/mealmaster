@@ -11,9 +11,10 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [activeTab, setActiveTab] = useState("pantry");
 
-  useEffect(() => {
-    fetchPantry();
-  }, []);
+useEffect(() => {
+  fetchPantry();  // Fetch pantry when component mounts
+}, []);
+
 
   const handleFileChange = (event) => setFile(event.target.files[0]);
 
@@ -31,7 +32,7 @@ const uploadReceipt = async () => {
   try {
     const response = await axios.post("http://127.0.0.1:8000/scan_receipt", formData);
     alert("Receipt processed successfully!");
-    fetchPantry(); // ✅ Now it refreshes the pantry immediately
+    fetchPantry(); // ✅ This will refresh the pantry list after scanning
   } catch (error) {
     console.error("Error uploading receipt:", error);
     setErrorMessage("Failed to process receipt. Please try again.");
@@ -40,16 +41,20 @@ const uploadReceipt = async () => {
   }
 };
 
+
 const fetchPantry = async () => {
   try {
+    console.log("🔹 Fetching pantry...");
     const response = await axios.get("http://127.0.0.1:8000/pantry");
-    if (response.data.pantry && Array.isArray(response.data.pantry)) {
-      setPantry(response.data.pantry.map(item => item.name)); // ✅ Extracts names properly
-    }
+    console.log("🔹 Pantry Response:", response.data);
+    
+    // ✅ Ensure pantry items update immediately
+    setPantry(response.data.pantry_items ? [...response.data.pantry_items] : []);
   } catch (error) {
     console.error("Error fetching pantry:", error);
   }
 };
+
 
 const fetchRecipes = async () => {
     setRecipeLoading(true);
@@ -88,14 +93,28 @@ const fetchRecipes = async () => {
     <div className="container">
       <h1>MealMaster 🥘</h1>
 
-      {/* Upload Form */}
-      <div className="upload-section">
-        <input type="file" onChange={handleFileChange} />
-        <button className="upload-btn" onClick={uploadReceipt} disabled={loading}>
-          {loading ? "Processing..." : "Upload Receipt"}
-        </button>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-      </div>
+{/* Upload Form */}
+<div className="upload-section">
+  {/* Styled File Input Button */}
+  <label htmlFor="file-upload" className="upload-label">
+   📁 Browse..
+  </label>
+  <input
+    id="file-upload"
+    type="file"
+    onChange={handleFileChange}
+    style={{ display: "none" }} // Keeps the default input hidden
+  />
+  
+  {/* Show Selected File Name */}
+  {file && <p className="file-name">{file.name}</p>}
+
+  {/* Upload Button */}
+  <button className="upload-btn" onClick={uploadReceipt} disabled={loading || !file}>
+    {loading ? "Processing..." : "Upload Receipt"}
+  </button>
+</div>
+
 
       {/* Tabs */}
       <div className="tabs">

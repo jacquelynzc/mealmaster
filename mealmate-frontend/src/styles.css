@@ -1,0 +1,339 @@
+/* General Layout */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8F9FA;
+    color: #212529;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+}
+
+/* Main Container */
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    justify-self: center;
+}
+
+/* Upload Section */
+.upload-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #F0F0F0;
+    border-radius: 8px;
+    border: 2px dashed #008CBA;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.tab {
+    flex: 1;
+    padding: 14px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    background: #ddd;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0px 4px 0px #B0B0B0;
+}
+
+/* Active Tab */
+.tab.active {
+    background: #2F4F4F;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 0px #1A1A1A;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* General Button Hover & Active Effects */
+button {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+    display: inline-block;
+    box-shadow: 0px 5px 0px #1A374D; /* Creates a 3D effect */
+    position: relative;
+}
+
+/* Hover Effect - Buttons rise slightly */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 7px 0px #162D3C; /* Adjusted for depth effect */
+}
+
+/* Active Effect - Buttons press down */
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0px 3px 0px #0F202A;
+}
+
+/* Active Tab */
+.tab.active {
+    background: #2F4F4F;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 0px #1A1A1A;
+}
+
+/* Tab Hover Effect */
+.tab:hover {
+    background: #475B5B;
+    color: #fff;
+    transform: scale(1.03);
+}
+
+/* Pantry List */
+.pantry-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+/* Individual Pantry Items */
+.pantry-item {
+    font-size: 18px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #F8F9FA;
+    margin: 5px 0;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Pantry Item Hover Effect */
+.pantry-item:hover {
+    background: #E0E0E0;
+    transform: scale(1.02);
+}
+
+/* Clear Pantry Button */
+.clear-btn {
+    background: linear-gradient(145deg, #8B0000, #FF6347);
+    color: white;
+    font-size: 16px;
+    width: 90%;
+}
+
+/* Upload Section */
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+/* Hide Default File Input */
+.upload-section input[type="file"] {
+    display: none;
+}
+
+/* Styled Upload Label (Acts as Button) */
+.upload-label {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    text-align: center;
+    background: linear-gradient(145deg, #f2f2f2, #c8c8c8);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15), -2px -2px 4px rgba(255, 255, 255, 0.6);
+    border-bottom: 2px solid #aaa;
+    display: inline-block;
+}
+
+/* Hover Effect - Lifts Slightly */
+.upload-label:hover {
+    background: linear-gradient(145deg, #e4e4e4, #bababa);
+    transform: translateY(-1px);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -2px -2px 5px rgba(255, 255, 255, 0.7);
+}
+
+/* Active (Click) Effect - Presses Down */
+.upload-label:active {
+    background: linear-gradient(145deg, #b8b8b8, #a0a0a0);
+    transform: translateY(2px);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid #888;
+}
+
+/* Upload Button - Matches the UI */
+.upload-btn {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    text-align: center;
+    background: linear-gradient(145deg, #f2f2f2, #c8c8c8);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15), -2px -2px 4px rgba(255, 255, 255, 0.6);
+    border-bottom: 2px solid #aaa;
+    display: inline-block;
+}
+
+/* Hover Effect - Upload Button */
+.upload-btn:hover {
+    background: linear-gradient(145deg, #e4e4e4, #bababa);
+    transform: translateY(-1px);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -2px -2px 5px rgba(255, 255, 255, 0.7);
+}
+
+/* Active (Click) Effect - Upload Button */
+.upload-btn:active {
+    background: linear-gradient(145deg, #b8b8b8, #a0a0a0);
+    transform: translateY(2px);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid #888;
+}
+
+
+button {
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    text-align: center;
+    display: inline-block;
+    background: linear-gradient(145deg, #f2f2f2, #c8c8c8);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15), -2px -2px 4px rgba(255, 255, 255, 0.6);
+    position: relative;
+    border-bottom: 2px solid #aaa;
+}
+
+/* Hover Effect - Button Lifts Slightly */
+button:hover {
+    background: linear-gradient(145deg, #e4e4e4, #bababa);
+    transform: translateY(-1px);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -2px -2px 5px rgba(255, 255, 255, 0.7);
+}
+
+/* Active (Click) Effect - Button Presses Down */
+button:active {
+    background: linear-gradient(145deg, #b8b8b8, #a0a0a0);
+    transform: translateY(2px);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid #888;
+}
+
+/* Tabs - Subtle 3D Look */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    padding: 8px;
+    background: linear-gradient(145deg, #f1f1f1, #d1d1d1);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 4px rgba(255, 255, 255, 0.7);
+}
+
+/* Individual Tab */
+.tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    background: linear-gradient(145deg, #f5f5f5, #d9d9d9);
+    border-radius: 6px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15), -2px -2px 3px rgba(255, 255, 255, 0.6);
+    border-bottom: 2px solid #aaa;
+}
+
+/* Hover Effect - Tab Lifts */
+.tab:hover {
+    background: linear-gradient(145deg, #e4e4e4, #c6c6c6);
+    transform: translateY(-1px);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.8);
+}
+
+/* Active (Selected) Tab - Pressed Effect */
+.tab.active {
+    background: linear-gradient(145deg, #c6c6c6, #a8a8a8);
+    transform: translateY(1px);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid #888;
+}
+
+
+/* Recipe List */
+.recipes-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+/* Recipe Item */
+.recipe-item {
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    background: white;
+    margin: 10px 0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+/* Recipe Image */
+.recipe-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+/* Recipe Link */
+.recipes-list a {
+    text-decoration: none;
+    color: #008CBA;
+    font-weight: bold;
+}
+
+.recipes-list a:hover {
+    text-decoration: underline;
+}
+
