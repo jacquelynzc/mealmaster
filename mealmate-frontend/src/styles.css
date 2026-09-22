@@ -1,339 +1,252 @@
-/* General Layout */
+/* Reset and Base Styles */
+:root {
+  --primary-color: rgba(16, 185, 129, 0.75);
+  --secondary-color: rgba(6, 95, 70, 0.75);
+  --danger-color: #dc2626;
+  --background-color: #f8fafc;
+  --surface-color: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --border-radius: 0.75rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 2.5rem;
+  --shadow-sm: 0 0.1rem 0.3rem rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 1rem 1.5rem rgba(0, 0, 0, 0.1);
+  --container-width: 60rem;
+  --recipe-card-width: 37.5rem;
+}
+
+html,
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #F8F9FA;
-    color: #212529;
-    margin: 0 auto;
-    padding: 0;
-    text-align: center;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.5;
+  font-size: 16px; /* Base font size for rem calculations */
 }
 
-/* Main Container */
+/* Main Container - Fixed Width */
 .container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-    justify-self: center;
+  width: var(--container-width);
+  min-height: 90vh;
+  margin: var(--spacing-md) auto;
+  padding: var(--spacing-lg);
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
-/* Upload Section */
-.upload-section {
-    margin: 20px 0;
-    padding: 20px;
-    background: #F0F0F0;
-    border-radius: 8px;
-    border: 2px dashed #008CBA;
-}
-
-/* Tabs */
+/* Enhanced Tabs */
 .tabs {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin: 20px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--background-color);
+  border-radius: var(--border-radius);
 }
 
 .tab {
-    flex: 1;
-    padding: 14px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px;
-    background: #ddd;
-    transition: all 0.3s ease;
-    text-align: center;
-    box-shadow: 0px 4px 0px #B0B0B0;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  font-size: 1.1rem;
 }
 
-/* Active Tab */
-.tab.active {
-    background: #2F4F4F;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0px 6px 0px #1A1A1A;
+/* Recipe Card Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-md);
+  backdrop-filter: blur(0.25rem);
 }
 
-/* Tab Content */
+.modal-content {
+  width: var(--recipe-card-width);
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  border: 0.2rem solid var(--primary-color);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 
+    0 1.25rem 1.5rem -0.3rem rgba(0, 0, 0, 0.2),
+    0 0.625rem 0.625rem -0.3rem rgba(0, 0, 0, 0.1);
+}
+
+.modal-img {
+  width: 100%;
+  height: 18.75rem;
+  object-fit: cover;
+  margin: 0;
+}
+
+.modal-content-text {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-width: var(--recipe-card-width);
+}
+
+.modal-content-text h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--text-primary);
+}
+
+.modal-content-text p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.close-modal {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+.close-modal:hover {
+  background: var(--surface-color);
+  transform: scale(1.1);
+}
+
+/* Upload Section - Vertically Stacked */
+.upload-section {
+  padding: var(--spacing-lg);
+  background-color: var(--background-color);
+  border: 0.125rem dashed var(--primary-color);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  margin: var(--spacing-md) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.upload-section > * {
+  width: 100%;
+  max-width: 25rem;
+}
+
+/* Button Styles */
+button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  background: var(--primary-color);
+  color: white;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 
+    0 0.125rem 0 0 rgba(0, 0, 0, 0.2),
+    0 0.25rem 0.5rem -0.125rem rgba(0, 0, 0, 0.1),
+    0 0.125rem 0 0 var(--secondary-color) inset,
+    0 -0.125rem 0 0 rgba(0, 0, 0, 0.2) inset;
+}
+
+button:hover {
+  transform: translateY(-0.125rem) translateZ(0);
+  box-shadow: 
+    0 0.25rem 0 0 rgba(0, 0, 0, 0.2),
+    0 0.5rem 1rem -0.25rem rgba(0, 0, 0, 0.1),
+    0 0.125rem 0 0 var(--secondary-color) inset,
+    0 -0.125rem 0 0 rgba(0, 0, 0, 0.2) inset;
+}
+
+button:active {
+  transform: translateY(0.125rem) translateZ(0);
+  box-shadow: 
+    0 0 0 0 rgba(0, 0, 0, 0.2),
+    0 0.125rem 0.25rem -0.125rem rgba(0, 0, 0, 0.1),
+    0 0.125rem 0 0 var(--secondary-color) inset,
+    0 -0.125rem 0 0 rgba(0, 0, 0, 0.2) inset;
+}
+
+/* Content Areas */
 .tab-content {
-    display: none;
-    padding: 20px;
+  display: none;
+  padding: var(--spacing-md);
+  height: 60vh;
+  overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .tab-content.active {
-    display: block;
+  display: block;
+  animation: fadeIn 0.3s ease;
 }
 
-/* Error Message */
-.error-message {
-    color: red;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-/* General Button Hover & Active Effects */
-button {
-    font-size: 18px;
-    font-weight: bold;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    text-align: center;
-    display: inline-block;
-    box-shadow: 0px 5px 0px #1A374D; /* Creates a 3D effect */
-    position: relative;
-}
-
-/* Hover Effect - Buttons rise slightly */
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0px 7px 0px #162D3C; /* Adjusted for depth effect */
-}
-
-/* Active Effect - Buttons press down */
-button:active {
-    transform: translateY(2px);
-    box-shadow: 0px 3px 0px #0F202A;
-}
-
-/* Active Tab */
-.tab.active {
-    background: #2F4F4F;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0px 6px 0px #1A1A1A;
-}
-
-/* Tab Hover Effect */
-.tab:hover {
-    background: #475B5B;
-    color: #fff;
-    transform: scale(1.03);
-}
-
-/* Pantry List */
-.pantry-list {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0;
-}
-
-/* Individual Pantry Items */
-.pantry-item {
-    font-size: 18px;
-    padding: 12px;
-    border-radius: 8px;
-    background: #F8F9FA;
-    margin: 5px 0;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease-in-out;
-}
-
-/* Pantry Item Hover Effect */
-.pantry-item:hover {
-    background: #E0E0E0;
-    transform: scale(1.02);
-}
-
-/* Clear Pantry Button */
-.clear-btn {
-    background: linear-gradient(145deg, #8B0000, #FF6347);
-    color: white;
-    font-size: 16px;
-    width: 90%;
-}
-
-/* Upload Section */
-.upload-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-/* Hide Default File Input */
-.upload-section input[type="file"] {
-    display: none;
-}
-
-/* Styled Upload Label (Acts as Button) */
-.upload-label {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 12px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
-    text-align: center;
-    background: linear-gradient(145deg, #f2f2f2, #c8c8c8);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15), -2px -2px 4px rgba(255, 255, 255, 0.6);
-    border-bottom: 2px solid #aaa;
-    display: inline-block;
-}
-
-/* Hover Effect - Lifts Slightly */
-.upload-label:hover {
-    background: linear-gradient(145deg, #e4e4e4, #bababa);
-    transform: translateY(-1px);
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -2px -2px 5px rgba(255, 255, 255, 0.7);
-}
-
-/* Active (Click) Effect - Presses Down */
-.upload-label:active {
-    background: linear-gradient(145deg, #b8b8b8, #a0a0a0);
-    transform: translateY(2px);
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
-    border-bottom: 1px solid #888;
-}
-
-/* Upload Button - Matches the UI */
-.upload-btn {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
-    text-align: center;
-    background: linear-gradient(145deg, #f2f2f2, #c8c8c8);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15), -2px -2px 4px rgba(255, 255, 255, 0.6);
-    border-bottom: 2px solid #aaa;
-    display: inline-block;
-}
-
-/* Hover Effect - Upload Button */
-.upload-btn:hover {
-    background: linear-gradient(145deg, #e4e4e4, #bababa);
-    transform: translateY(-1px);
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -2px -2px 5px rgba(255, 255, 255, 0.7);
-}
-
-/* Active (Click) Effect - Upload Button */
-.upload-btn:active {
-    background: linear-gradient(145deg, #b8b8b8, #a0a0a0);
-    transform: translateY(2px);
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
-    border-bottom: 1px solid #888;
-}
-
-
-button {
-    color: black;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
-    text-align: center;
-    display: inline-block;
-    background: linear-gradient(145deg, #f2f2f2, #c8c8c8);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15), -2px -2px 4px rgba(255, 255, 255, 0.6);
-    position: relative;
-    border-bottom: 2px solid #aaa;
-}
-
-/* Hover Effect - Button Lifts Slightly */
-button:hover {
-    background: linear-gradient(145deg, #e4e4e4, #bababa);
-    transform: translateY(-1px);
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -2px -2px 5px rgba(255, 255, 255, 0.7);
-}
-
-/* Active (Click) Effect - Button Presses Down */
-button:active {
-    background: linear-gradient(145deg, #b8b8b8, #a0a0a0);
-    transform: translateY(2px);
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
-    border-bottom: 1px solid #888;
-}
-
-/* Tabs - Subtle 3D Look */
-.tabs {
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0;
-    padding: 8px;
-    background: linear-gradient(145deg, #f1f1f1, #d1d1d1);
-    border-radius: 10px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 4px rgba(255, 255, 255, 0.7);
-}
-
-/* Individual Tab */
-.tab {
-    flex: 1;
-    padding: 12px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
-    background: linear-gradient(145deg, #f5f5f5, #d9d9d9);
-    border-radius: 6px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15), -2px -2px 3px rgba(255, 255, 255, 0.6);
-    border-bottom: 2px solid #aaa;
-}
-
-/* Hover Effect - Tab Lifts */
-.tab:hover {
-    background: linear-gradient(145deg, #e4e4e4, #c6c6c6);
-    transform: translateY(-1px);
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.8);
-}
-
-/* Active (Selected) Tab - Pressed Effect */
-.tab.active {
-    background: linear-gradient(145deg, #c6c6c6, #a8a8a8);
-    transform: translateY(1px);
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
-    border-bottom: 1px solid #888;
-}
-
-
-/* Recipe List */
+/* Lists */
+.pantry-list,
 .recipes-list {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0;
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: 0;
+  margin: var(--spacing-md) 0;
+  list-style: none;
+  width: 100%;
 }
 
-/* Recipe Item */
-.recipe-item {
-    font-size: 16px;
-    padding: 12px;
-    border-radius: 8px;
-    background: white;
-    margin: 10px 0;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
+/* Responsive Adjustments */
+@media (max-width: 70rem) {
+  .container {
+    width: 95%;
+    min-width: 20rem;
+  }
+  
+  .modal-content {
+    width: 95%;
+    max-width: var(--recipe-card-width);
+  }
 }
 
-/* Recipe Image */
-.recipe-img {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-    margin-right: 15px;
-    object-fit: cover;
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.625rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
-/* Recipe Link */
-.recipes-list a {
-    text-decoration: none;
-    color: #008CBA;
-    font-weight: bold;
-}
-
-.recipes-list a:hover {
-    text-decoration: underline;
-}
-
